@@ -247,22 +247,3 @@ func (self *detailView) Delete(ctx echo.Context) error {
 func articleDetailAsView() supporter.View {
 	return &detailView{}
 }
-
-
-//func getStatusCode(err error) int {
-//	if err == nil {
-//		return http.StatusOK
-//	}
-//
-//	log.Error(err)
-//	switch err {
-//	case domain.ErrInternalServerError:
-//		return http.StatusInternalServerError
-//	case domain.ErrNotFound:
-//		return http.StatusNotFound
-//	case domain.ErrConflict:
-//		return http.StatusConflict
-//	default:
-//		return http.StatusInternalServerError
-//	}
-//}
