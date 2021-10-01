@@ -33,3 +33,8 @@ func (t *Time) Scan(value interface{}) error {
 func (t Time) Value() (driver.Value, error) {
 	return time.Time(t), nil
 }
+
+
+func (t Time) AsTime() time.Time {
+	return time.Time(t)
+}

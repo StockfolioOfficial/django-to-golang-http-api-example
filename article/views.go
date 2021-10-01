@@ -70,7 +70,7 @@ func (self *view) Get(ctx echo.Context) error {
 
 	var nextCursor string
 	if l := len(list); l == data.Num {
-		nextCursor = encodeCursor(time.Time(list[l-1].CreatedAt))
+		nextCursor = encodeCursor(list[l-1].CreatedAt.AsTime())
 	}
 
 	ctx.Response().Header().Set("X-Cursor", nextCursor)
@@ -85,11 +85,11 @@ func (self *view) Get(ctx echo.Context) error {
 			"author": echo.Map{
 				"id":         article.Author.ID,
 				"name":       article.Author.Name,
-				"updated_at": article.Author.UpdatedAt,
-				"created_at": article.Author.CreatedAt,
+				"updated_at": article.Author.UpdatedAt.AsTime(),
+				"created_at": article.Author.CreatedAt.AsTime(),
 			},
-			"updated_at": article.UpdatedAt,
-			"created_at": article.CreatedAt,
+			"updated_at": article.UpdatedAt.AsTime(),
+			"created_at": article.CreatedAt.AsTime(),
 		}
 	}
 	return ctx.JSON(http.StatusOK, response)
@@ -155,11 +155,11 @@ func (self *view) Post(ctx echo.Context) error {
 		"author": echo.Map{
 			"id":         article.Author.ID,
 			"name":       article.Author.Name,
-			"updated_at": article.Author.UpdatedAt,
-			"created_at": article.Author.CreatedAt,
+			"updated_at": article.Author.UpdatedAt.AsTime(),
+			"created_at": article.Author.CreatedAt.AsTime(),
 		},
-		"updated_at": article.UpdatedAt,
-		"created_at": article.CreatedAt,
+		"updated_at": article.UpdatedAt.AsTime(),
+		"created_at": article.CreatedAt.AsTime(),
 	})
 }
 
@@ -198,11 +198,11 @@ func (self *detailView) Get(ctx echo.Context) error {
 			"author": echo.Map{
 				"id":         article.Author.ID,
 				"name":       article.Author.Name,
-				"updated_at": article.Author.UpdatedAt,
-				"created_at": article.Author.CreatedAt,
+				"updated_at": article.Author.UpdatedAt.AsTime(),
+				"created_at": article.Author.CreatedAt.AsTime(),
 			},
-			"updated_at": article.UpdatedAt,
-			"created_at": article.CreatedAt,
+			"updated_at": article.UpdatedAt.AsTime(),
+			"created_at": article.CreatedAt.AsTime(),
 		})
 	case gorm.ErrRecordNotFound:
 		return ctx.JSON(http.StatusNotFound, supporter.ErrorResponseMessage("not found"))
