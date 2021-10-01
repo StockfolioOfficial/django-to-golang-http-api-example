@@ -33,47 +33,6 @@ func encodeCursor(t time.Time) string {
 	return base64.StdEncoding.EncodeToString([]byte(timeString))
 }
 
-type responseDTO struct {
-	ID        int64             `json:"id"`
-	Title     string            `json:"title"`
-	Content   string            `json:"content"`
-	Author    authorResponseDTO `json:"author"`
-	UpdatedAt time.Time         `json:"updated_at"`
-	CreatedAt time.Time         `json:"created_at"`
-}
-
-type authorResponseDTO struct {
-	ID        int64  `json:"id"`
-	Name      string `json:"name"`
-	UpdatedAt time.Time `json:"updated_at"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-func toDTO(src Model) responseDTO {
-	return responseDTO{
-		ID:      src.ID,
-		Title:   src.Title,
-		Content: src.Content,
-		Author: authorResponseDTO{
-			ID:        src.Author.ID,
-			Name:      src.Author.Name,
-			UpdatedAt: time.Time(src.Author.UpdatedAt),
-			CreatedAt: time.Time(src.Author.CreatedAt),
-		},
-		UpdatedAt: time.Time(src.UpdatedAt),
-		CreatedAt: time.Time(src.CreatedAt),
-	}
-}
-
-func toDTOList(list []Model) (res []responseDTO) {
-	res = make([]responseDTO, len(list))
-	for i := range res {
-		res[i] = toDTO(list[i])
-	}
-
-	return
-}
-
 type view struct {
 	supporter.APIView
 }
@@ -115,7 +74,25 @@ func (self *view) Get(ctx echo.Context) error {
 	}
 
 	ctx.Response().Header().Set("X-Cursor", nextCursor)
-	return ctx.JSON(http.StatusOK, toDTOList(list))
+
+	var response = make([]echo.Map, len(list))
+	for i := range list {
+		var article = list[i]
+		response[i] = echo.Map{
+			"id":      article.ID,
+			"title":   article.Title,
+			"content": article.Content,
+			"author": echo.Map{
+				"id":         article.Author.ID,
+				"name":       article.Author.Name,
+				"updated_at": article.Author.UpdatedAt,
+				"created_at": article.Author.CreatedAt,
+			},
+			"updated_at": article.UpdatedAt,
+			"created_at": article.CreatedAt,
+		}
+	}
+	return ctx.JSON(http.StatusOK, response)
 }
 
 func (self *view) Post(ctx echo.Context) error {
@@ -170,7 +147,20 @@ func (self *view) Post(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, supporter.ErrorResponseMessage("server internal error"))
 	}
 
-	return ctx.JSON(http.StatusCreated, toDTO(article))
+
+	return ctx.JSON(http.StatusCreated, echo.Map{
+		"id":      article.ID,
+		"title":   article.Title,
+		"content": article.Content,
+		"author": echo.Map{
+			"id":         article.Author.ID,
+			"name":       article.Author.Name,
+			"updated_at": article.Author.UpdatedAt,
+			"created_at": article.Author.CreatedAt,
+		},
+		"updated_at": article.UpdatedAt,
+		"created_at": article.CreatedAt,
+	})
 }
 
 func articleAsView() supporter.View {
@@ -201,7 +191,19 @@ func (self *detailView) Get(ctx echo.Context) error {
 		First(&article, data.ID).Error
 	switch err {
 	case nil:
-		return ctx.JSON(http.StatusOK, toDTO(article))
+		return ctx.JSON(http.StatusOK, echo.Map{
+			"id":      article.ID,
+			"title":   article.Title,
+			"content": article.Content,
+			"author": echo.Map{
+				"id":         article.Author.ID,
+				"name":       article.Author.Name,
+				"updated_at": article.Author.UpdatedAt,
+				"created_at": article.Author.CreatedAt,
+			},
+			"updated_at": article.UpdatedAt,
+			"created_at": article.CreatedAt,
+		})
 	case gorm.ErrRecordNotFound:
 		return ctx.JSON(http.StatusNotFound, supporter.ErrorResponseMessage("not found"))
 	default:
