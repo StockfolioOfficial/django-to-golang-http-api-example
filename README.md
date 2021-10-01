@@ -37,3 +37,28 @@ https://github.com/bxcodec/go-clean-arch
 ```bash
 # ./app
 ```
+
+# API
+## Article Fetch (List)
+목록 가져오기
+```bash
+# curl -X GET http://localhost:8000/articles
+```
+
+## Article Create
+생성
+```bash
+# curl -X POST -H "Content-Type: application/json" -d "{\"title\":\"제목에 대한 데이터\",\"content\":\"컨텐츠에 대한 데이터\",\"author\":{\"id\":1}}" http://localhost:8000/articles
+```
+
+## Article Get (One)
+읽기
+```bash
+# curl -X GET http://localhost:8000/articles/{id}
+```
+
+## Article Delete
+삭제 
+```bash
+# curl -X DELETE http://localhost:8000/articles/{id}
+```
