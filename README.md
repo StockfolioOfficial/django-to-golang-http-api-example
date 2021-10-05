@@ -18,7 +18,7 @@ https://github.com/bxcodec/go-clean-arch
 2. `go mod download` 터미널에서 실행 (프로젝트 루트에서)  
 `pip install -r requirements.txt`나 `npm install`이랑 같은 맥락
 ```bash
-# go mod download
+# go mod download all
 ```
 3. `go run .` 터미널에서 실행 (프로젝트 루트에서)
 ```bash
