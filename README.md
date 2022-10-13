@@ -1,5 +1,5 @@
-# django-to-golang-rest-api-example
-Golang RESTful API example like django project
+# django-to-golang-http-api-example
+Golang HTTP API example like django project
 
 # Reference
 https://github.com/bxcodec/go-clean-arch
